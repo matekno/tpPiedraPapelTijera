@@ -11,7 +11,7 @@ public class Main {
 
 		if (ganador == null) {
 			System.out.println("Empate");
-		} else if (ganador instanceof JugadorHumano) {
+		} else if (ganador instanceof JugadorConsola) {
 			System.out.println("Gana humano");
 		} else {
 			System.out.println("Gana maquina");

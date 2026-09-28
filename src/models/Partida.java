@@ -7,14 +7,14 @@ import interfaces.IJugador;
 import services.PartidaService;
 
 public class Partida { 
-	private JugadorHumano humano;
+	private JugadorConsola humano;
 	private JugadorMaquina maquina;
 	private PartidaService partidaService;
 	private IJugador ganador = null;
 	
 	public Partida() {
 		this.partidaService = new PartidaService();
-		this.humano = new JugadorHumano(this.partidaService);
+		this.humano = new JugadorConsola(this.partidaService);
 		this.maquina = new JugadorMaquina(this.partidaService);
 	}
 	

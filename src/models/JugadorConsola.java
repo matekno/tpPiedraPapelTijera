@@ -5,12 +5,12 @@ import java.util.Scanner;
 import interfaces.IJugador;
 import services.PartidaService;
 
-public class JugadorHumano implements IJugador {
+public class JugadorConsola implements IJugador {
 
 	private Jugada jugadaElegida;
 	private PartidaService partidaService;
 	
-	public JugadorHumano(PartidaService ps) {
+	public JugadorConsola(PartidaService ps) {
 		this.partidaService = ps;
 	}
 	
