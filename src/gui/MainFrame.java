@@ -1,27 +1,26 @@
 package gui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import interfaces.IJugador;
 import models.Jugada;
-import models.JugadorConsola;
 import models.JugadorMaquina;
 import models.Partida;
-import models.Resultado;
 import services.PartidaService;
-
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 public class MainFrame extends JFrame {
 
@@ -35,6 +34,7 @@ public class MainFrame extends JFrame {
 	private JButton btnTijera;
 	private JLabel lblMaquinaEligio;
 	private JLabel lblGanador;
+	private JCheckBox chckbxModoOscuro;
 
 	private JugadorGUI humano;
 	private JugadorMaquina maquina;
@@ -130,9 +130,14 @@ public class MainFrame extends JFrame {
 		lblGanador.setBounds(20, 360, 640, 80);
 		contentPane.add(lblGanador);
 		
-		JToggleButton tglModoOscuro = new JToggleButton("Oscuro / Claro");
-		tglModoOscuro.setBounds(499, 452, 161, 29);
-		contentPane.add(tglModoOscuro);
+		chckbxModoOscuro = new JCheckBox("Modo Oscuro");
+		chckbxModoOscuro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				aplicarModoOscuro(chckbxModoOscuro.isSelected());
+			}
+		});
+		chckbxModoOscuro.setBounds(532, 455, 128, 23);
+		contentPane.add(chckbxModoOscuro);
 
 	}
 	
@@ -154,5 +159,24 @@ public class MainFrame extends JFrame {
 		
 	}
 	
-	
+	private void aplicarModoOscuro(boolean activado) {
+	    Color fondo;
+	    Color texto;
+	    if (activado) {
+	        fondo = new Color(30, 30, 30);
+	        texto = new Color(230, 230, 230);
+	    } else {
+	        fondo = UIManager.getColor("Panel.background");
+	        texto = UIManager.getColor("Label.foreground");
+	    }
+
+	    contentPane.setBackground(fondo);
+	    btnPiedra.setForeground(texto);
+	    btnPapel.setForeground(texto);
+	    btnTijera.setForeground(texto);
+	    
+	    lblMaquinaEligio.setForeground(texto);
+	    lblGanador.setForeground(texto);
+	    chckbxModoOscuro.setForeground(texto);
+	}
 }
