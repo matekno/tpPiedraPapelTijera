@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JToggleButton;
 
 public class MainFrame extends JFrame {
 
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame {
 	private JugadorMaquina maquina;
 	private PartidaService partidaService;
 	private Partida partida;
+	private int nroRonda;
 
 	/**
 	 * Launch the application.
@@ -65,6 +67,7 @@ public class MainFrame extends JFrame {
 		this.humano = new JugadorGUI();
 		this.maquina = new JugadorMaquina(partidaService);
 		this.partida = new Partida(humano, maquina, partidaService);
+		this.nroRonda = 0;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 680, 512);
@@ -126,19 +129,30 @@ public class MainFrame extends JFrame {
 		lblGanador.setFont(new Font("Lucida Grande", Font.BOLD, 30));
 		lblGanador.setBounds(20, 360, 640, 80);
 		contentPane.add(lblGanador);
+		
+		JToggleButton tglModoOscuro = new JToggleButton("Oscuro / Claro");
+		tglModoOscuro.setBounds(499, 452, 161, 29);
+		contentPane.add(tglModoOscuro);
 
 	}
 	
 	private void jugar() {
-		IJugador ganador = this.partida.jugar();
+		Object[] resultado = this.partida.jugarConRtaMaquina();
+		nroRonda += 1;
+		
+		Jugada jugadaMaquina = (Jugada) resultado[1];
+		lblMaquinaEligio.setText("Maquina eligio: " + jugadaMaquina);
+		
+		IJugador ganador = (IJugador) resultado[0];
 		if (ganador == null) {
-			lblGanador.setText("EMPATE");
-		} else if (ganador instanceof JugadorConsola) {
-			lblGanador.setText("Gana humano");
+			lblGanador.setText("Ronda " + nroRonda + ": EMPATE");
+		} else if (ganador instanceof JugadorGUI) {
+			lblGanador.setText("Ronda " + nroRonda + ": GANA HUMANO");
 		} else {
-			lblGanador.setText("Gana maquina");
+			lblGanador.setText("Ronda " + nroRonda + ": GANA MAQUINA");
 		}
 		
-		
 	}
+	
+	
 }

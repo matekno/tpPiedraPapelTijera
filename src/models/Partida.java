@@ -9,7 +9,6 @@ import services.PartidaService;
 public class Partida {
 	private IJugador jugadorAlpha;
 	private IJugador jugadorBeta;
-	private IJugador ganador = null;
 	private PartidaService partidaService;
 
 	public Partida(IJugador jugadorAlpha, IJugador jugadorBeta, PartidaService partidaService) {
@@ -24,17 +23,44 @@ public class Partida {
 		System.out.println("Maquina eligio: " + jugadaBeta);
 
 		Resultado resultadoAlpha = partidaService.definirGanador(jugadaAlpha, jugadaBeta);
-
+		IJugador ganador = null;
+		
 		switch (resultadoAlpha) {
 		case GANA:
-			this.ganador = this.jugadorAlpha;
+			ganador = this.jugadorAlpha;
 			break;
 		case PIERDE:
-			this.ganador = this.jugadorBeta;
+			ganador = this.jugadorBeta;
 		default:
 			break;
 		}
-		return this.ganador;
+		return ganador;
 	}
+	
+	public Object[] jugarConRtaMaquina() {
+		Jugada jugadaAlpha = this.jugadorAlpha.elegirJugada();
+		Jugada jugadaBeta = this.jugadorBeta.elegirJugada();
+		System.out.println("Maquina eligio: " + jugadaBeta);
+
+		Resultado resultadoAlpha = partidaService.definirGanador(jugadaAlpha, jugadaBeta);
+		IJugador ganador = null;
+
+		
+		switch (resultadoAlpha) {
+		case GANA:
+			ganador = this.jugadorAlpha;
+			break;
+		case PIERDE:
+			ganador = this.jugadorBeta;
+		default:
+			break;
+		}
+		
+		Object[] toReturn = {ganador, jugadaBeta};
+		return toReturn;
+	}
+	
 
 }
+
+
