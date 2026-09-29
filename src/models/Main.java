@@ -1,12 +1,16 @@
 package models;
 
 import interfaces.IJugador;
+import services.PartidaService;
 
 public class Main {
 
 	public static void main(String[] args) {
+		PartidaService partidaService = new PartidaService();
+		IJugador humano = new JugadorConsola(partidaService);
+		IJugador maquina = new JugadorMaquina(partidaService);
 
-		Partida partida = new Partida();
+		Partida partida = new Partida(humano, maquina, partidaService);
 		IJugador ganador = partida.jugar();
 
 		if (ganador == null) {

@@ -6,37 +6,35 @@ import java.util.Scanner;
 import interfaces.IJugador;
 import services.PartidaService;
 
-public class Partida { 
-	private JugadorConsola humano;
-	private JugadorMaquina maquina;
-	private PartidaService partidaService;
+public class Partida {
+	private IJugador jugadorAlpha;
+	private IJugador jugadorBeta;
 	private IJugador ganador = null;
-	
-	public Partida() {
-		this.partidaService = new PartidaService();
-		this.humano = new JugadorConsola(this.partidaService);
-		this.maquina = new JugadorMaquina(this.partidaService);
-	}
-	
-	public IJugador jugar() {
-		Jugada jugadaHumano = this.humano.elegirJugada();
-		Jugada jugadaMaquina = this.maquina.elegirJugada();
-		System.out.println("Maquina eligio: " + jugadaMaquina);
+	private PartidaService partidaService;
 
-		
-		Resultado resultadoHumano = partidaService.definirGanador(jugadaHumano, jugadaMaquina);
-		Resultado resultadoMaquina = partidaService.definirGanador(jugadaMaquina, jugadaHumano);
-	
-		switch (resultadoHumano) {
+	public Partida(IJugador jugadorAlpha, IJugador jugadorBeta, PartidaService partidaService) {
+		this.jugadorAlpha = jugadorAlpha;
+		this.jugadorBeta = jugadorBeta;
+		this.partidaService = partidaService;
+	}
+
+	public IJugador jugar() {
+		Jugada jugadaAlpha = this.jugadorAlpha.elegirJugada();
+		Jugada jugadaBeta = this.jugadorBeta.elegirJugada();
+		System.out.println("Maquina eligio: " + jugadaBeta);
+
+		Resultado resultadoAlpha = partidaService.definirGanador(jugadaAlpha, jugadaBeta);
+
+		switch (resultadoAlpha) {
 		case GANA:
-			this.ganador = this.humano;
+			this.ganador = this.jugadorAlpha;
 			break;
 		case PIERDE:
-			this.ganador = this.maquina;
+			this.ganador = this.jugadorBeta;
 		default:
 			break;
 		}
 		return this.ganador;
 	}
-		
+
 }

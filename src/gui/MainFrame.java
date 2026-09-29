@@ -8,12 +8,19 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import interfaces.IJugador;
+import models.Jugada;
+import models.JugadorConsola;
+import models.JugadorMaquina;
 import models.Partida;
+import models.Resultado;
+import services.PartidaService;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 
@@ -27,11 +34,12 @@ public class MainFrame extends JFrame {
 	private JButton btnTijera;
 	private JLabel lblMaquinaEligio;
 	private JLabel lblGanador;
-	
-	private Partida partida = new Partida();
-	private JugadorGUI jugador = new JugadorGUI();
-	
-	
+
+	private JugadorGUI humano;
+	private JugadorMaquina maquina;
+	private PartidaService partidaService;
+	private Partida partida;
+
 	/**
 	 * Launch the application.
 	 */
@@ -52,6 +60,12 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		// Inicializar partida
+		partidaService = new PartidaService();
+		this.humano = new JugadorGUI();
+		this.maquina = new JugadorMaquina(partidaService);
+		this.partida = new Partida(humano, maquina, partidaService);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 680, 512);
 		contentPane = new JPanel();
@@ -75,14 +89,32 @@ public class MainFrame extends JFrame {
 		contentPane.add(lblTijera);
 
 		btnPiedra = new JButton("Piedra");
+		btnPiedra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				humano.setJugada(Jugada.PIEDRA);
+				jugar();
+			}
+		});
 		btnPiedra.setBounds(20, 256, 200, 29);
 		contentPane.add(btnPiedra);
 
 		btnPapel = new JButton("Papel");
+		btnPapel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				humano.setJugada(Jugada.PAPEL);
+				jugar();
+			}
+		});
 		btnPapel.setBounds(240, 257, 200, 29);
 		contentPane.add(btnPapel);
 
 		btnTijera = new JButton("Tijera");
+		btnTijera.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				humano.setJugada(Jugada.TIJERA);
+				jugar();
+			}
+		});
 		btnTijera.setBounds(460, 257, 200, 29);
 		contentPane.add(btnTijera);
 
@@ -94,5 +126,19 @@ public class MainFrame extends JFrame {
 		lblGanador.setFont(new Font("Lucida Grande", Font.BOLD, 30));
 		lblGanador.setBounds(20, 360, 640, 80);
 		contentPane.add(lblGanador);
+
+	}
+	
+	private void jugar() {
+		IJugador ganador = this.partida.jugar();
+		if (ganador == null) {
+			lblGanador.setText("EMPATE");
+		} else if (ganador instanceof JugadorConsola) {
+			lblGanador.setText("Gana humano");
+		} else {
+			lblGanador.setText("Gana maquina");
+		}
+		
+		
 	}
 }
